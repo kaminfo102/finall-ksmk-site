@@ -37,7 +37,7 @@ export default function RootLayout({
             <Navbar />
             <main>{children}</main>
             <Footer />
-            <Toaster
+            {/* <Toaster
               position="top-center"
               toastOptions={{
                 style: {
@@ -50,7 +50,10 @@ export default function RootLayout({
                 className: 'text-lg',
               }}
               closeButton
-            />
+            /> */}
+
+            <Toaster position="top-center" closeButton />
+
           </div>
         </ThemeProvider>
       </body>

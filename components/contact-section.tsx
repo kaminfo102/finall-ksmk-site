@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select"
 import { toast } from "sonner"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 
 const kurdistanCities = [
   "سنندج",
@@ -79,14 +80,23 @@ export function ContactSection() {
 
       setIsSuccess(true)
       form.reset()
-      toast.success('پیام شما با موفقیت ارسال شد', {
-        duration: 5000,
-        position: 'top-center',
-        className: 'bg-green-50 dark:bg-green-900 text-lg p-4',
-        style: {
-          background: 'var(--background)',
-          border: '1px solid var(--border)',
-        },
+      // toast.success('پیام شما با موفقیت ارسال شد', {
+      //   duration: 5000,
+      //   position: 'top-center',
+      //   className: 'bg-green-50 dark:bg-green-900 text-lg p-4',
+      //   style: {
+      //     background: 'var(--background)',
+      //     border: '1px solid var(--border)',
+      //   },
+      toast('پیام شما با موفقیت ارسال شد!', {
+        icon: <Image
+                      src="/images/logo/head-.png"
+                      alt="Logo"
+                      width={100}
+                      height={100}
+                      className="rounded-lg"
+                    />,
+      
         description: (
           <div className="mt-2 flex items-center text-green-600 dark:text-green-400">
             <CheckCircle2 className="h-5 w-5 ml-2" />

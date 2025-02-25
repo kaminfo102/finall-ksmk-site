@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -136,3 +141,35 @@
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
   }
 }
+
+
+/* استایل عمومی برای توست */
+[data-sonner-toast] {
+  background-color: rgba(30, 30, 30, 0.95) !important; /* پس‌زمینه تیره */
+  color: #ffffff !important; /* رنگ متن */
+  font-size: 1.2rem !important; /* اندازه متن */
+  font-family: Vazirmatn, sans-serif !important; /* فونت */
+  padding: 1.5rem !important; /* فاصله داخلی */
+  border-radius: 12px !important; /* گردی گوشه‌ها */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2) !important; /* سایه */
+  text-align: center !important;
+  max-width: 90%; /* جلوگیری از خیلی کشیده شدن توست */
+}
+
+/* تصویر آیکون درون توست */
+[data-sonner-toast] img {
+  width: 100px !important;
+  height: 100px !important;
+  margin-bottom: 10px !important;
+}
+
+/* تنظیمات برای دستگاه‌های بزرگ */
+@media (min-width: 768px) {
+  [data-sonner-toast] {
+    font-size: 1.5rem !important;
+    padding: 2rem !important;
+    max-width: 500px !important; /* عرض مناسب برای PC */
+  }
+}
+
+

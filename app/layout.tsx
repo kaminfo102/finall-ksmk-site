@@ -37,23 +37,34 @@ export default function RootLayout({
             <Navbar />
             <main>{children}</main>
             <Footer />
-            {/* <Toaster
+            <Toaster
               position="top-center"
               toastOptions={{
                 style: {
-                  // background: 'var(--background)',
-                  background: "red",
+                  background: 'var(--background)',
                   border: '1px solid var(--border)',
-                  fontSize: '1rem',
-                  padding: '1rem',
+                  fontSize: '1.125rem',
+                  padding: '1.25rem',
+                  fontFamily: vazirmatn.style.fontFamily,
                 },
-                className: 'text-lg',
+                className: 'text-lg shadow-lg',
+                success: {
+                  className: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+                  iconTheme: {
+                    primary: 'hsl(var(--primary))',
+                    secondary: 'white',
+                  },
+                },
+                error: {
+                  className: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
+                  iconTheme: {
+                    primary: 'hsl(var(--destructive))',
+                    secondary: 'white',
+                  },
+                },
               }}
               closeButton
-            /> */}
-
-            <Toaster position="top-center" closeButton />
-
+            />
           </div>
         </ThemeProvider>
       </body>

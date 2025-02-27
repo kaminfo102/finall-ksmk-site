@@ -6,20 +6,21 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const registration = await prisma.eventRegistration.create({
+    const event = await prisma.event.create({
       data: {
-        eventId: body.eventId,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        phone: body.phone,
-        email: body.email,
-        status: 'PENDING'
+        title: body.title,
+        description: body.description,
+        imageUrl: body.imageUrl,
+        date: new Date(body.date),
+        location: body.location,
+        capacity: body.capacity,
+        price: body.price
       }
     })
-    return NextResponse.json(registration)
+    return NextResponse.json(event)
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to register for event' },
+      { error: 'Failed to create event' },
       { status: 500 }
     )
   }

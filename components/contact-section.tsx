@@ -89,13 +89,13 @@ export function ContactSection() {
       //     border: '1px solid var(--border)',
       //   },
       toast('پیام شما با موفقیت ارسال شد!', {
-        icon: <Image
-                      src="/images/logo/head-.png"
-                      alt="Logo"
-                      width={100}
-                      height={100}
-                      className="rounded-lg"
-                    />,
+        // icon: <Image
+        //               src="/images/logo/head-.png"
+        //               alt="Logo"
+        //               width={100}
+        //               height={100}
+        //               className="rounded-lg"
+        //             />,
       
         description: (
           <div className="mt-2 flex items-center text-green-600 dark:text-green-400">

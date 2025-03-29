@@ -48,14 +48,26 @@ model Contact {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  imageUrl    String
-  date        DateTime
-  location    String
-  capacity    Int
-  price       Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int           @id @default(autoincrement())
+  title         String
+  description   String
+  imageUrl      String
+  date          DateTime
+  location      String
+  capacity      Int
+  price         Int?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  registrations Registration[]
+}
+
+model Registration {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  phone     String
+  email     String
+  eventId   Int
+  event     Event    @relation(fields: [eventId], references: [id])
+  createdAt DateTime @default(now())
 }

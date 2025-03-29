@@ -8,6 +8,7 @@ async function main() {
   await prisma.course.deleteMany()
   await prisma.gallery.deleteMany()
   await prisma.contact.deleteMany()
+  await prisma.event.deleteMany()
 
   // Create hero slides
   await prisma.heroSlider.createMany({
@@ -165,6 +166,39 @@ Python زبانی قدرتمند و همه‌کاره است که در حوزه�
         title: "فضای آموزشی",
         imageUrl: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=2070",
         description: "محیط آموزشی آموزشگاه"
+      }
+    ]
+  })
+
+  // Create events
+  await prisma.event.createMany({
+    data: [
+      {
+        title: "مسابقه برنامه‌نویسی ۱۴۰۳",
+        description: "بزرگترین رویداد برنامه‌نویسی سال با جوایز ارزنده",
+        imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070",
+        date: new Date("2024-06-15T09:00:00Z"),
+        location: "سنندج، سالن همایش‌های دانشگاه",
+        capacity: 100,
+        price: 500000
+      },
+      {
+        title: "کارگاه React.js پیشرفته",
+        description: "آموزش تکنیک‌های پیشرفته و بهینه‌سازی در React.js",
+        imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070",
+        date: new Date("2024-07-01T14:00:00Z"),
+        location: "آموزشگاه ما، سالن کنفرانس",
+        capacity: 30,
+        price: 1500000
+      },
+      {
+        title: "همایش هوش مصنوعی",
+        description: "بررسی آخرین دستاوردهای هوش مصنوعی در برنامه‌نویسی",
+        imageUrl: "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?q=80&w=2074",
+        date: new Date("2024-08-10T10:00:00Z"),
+        location: "هتل شادی، سالن اصلی",
+        capacity: 200,
+        price: null
       }
     ]
   })

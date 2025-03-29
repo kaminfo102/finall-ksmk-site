@@ -48,19 +48,9 @@ export default function RootLayout({
                   fontFamily: vazirmatn.style.fontFamily,
                 },
                 className: 'text-lg shadow-lg',
-                success: {
-                  className: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
-                  iconTheme: {
-                    primary: 'hsl(var(--primary))',
-                    secondary: 'white',
-                  },
-                },
-                error: {
-                  className: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
-                  iconTheme: {
-                    primary: 'hsl(var(--destructive))',
-                    secondary: 'white',
-                  },
+                classNames: {
+                  success: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+                  error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
                 },
               }}
               closeButton

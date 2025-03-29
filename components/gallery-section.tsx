@@ -15,7 +15,8 @@ type GalleryItem = {
   id: number
   title: string
   imageUrl: string
-  description?: string
+  description?: string | null
+  createdAt: Date
 }
 
 export function GallerySection({ items }: { items: GalleryItem[] }) {

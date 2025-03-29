@@ -15,7 +15,9 @@ type Event = {
   date: Date
   location: string
   capacity: number
-  price?: number
+  price?: number | null
+  createdAt: Date
+  updatedAt: Date
 }
 
 export function EventsSection({ events }: { events: Event[] }) {

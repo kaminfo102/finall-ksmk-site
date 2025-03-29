@@ -12,7 +12,9 @@ type Slide = {
   title: string
   description: string
   imageUrl: string
-  link?: string
+  link?: string | null
+  createdAt: Date
+  updatedAt: Date
 }
 
 export function HeroSlider({ slides }: { slides: Slide[] }) {
@@ -71,7 +73,7 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <Link href={slides[currentSlide].link}>
+                  <Link href={slides[currentSlide].link!}>
                     <Button size="lg" variant="default">
                       بیشتر بدانید
                     </Button>

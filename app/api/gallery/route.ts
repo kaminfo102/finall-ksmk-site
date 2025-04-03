@@ -1,23 +1,22 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 
-const prisma = new PrismaClient()
-
-export async function POST(request: Request) {
+export async function GET() {
   try {
-    const body = await request.json()
-    const item = await prisma.gallery.create({
-      data: {
-        title: body.title,
-        imageUrl: body.imageUrl,
-        description: body.description
-      }
+    const gallery = await prisma.gallery.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
-    return NextResponse.json(item)
+
+    return NextResponse.json(gallery)
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to create gallery item' },
+      { error: 'خطا در دریافت تصاویر' },
       { status: 500 }
     )
   }
 }
+
+export async function POST(request: Request) {
+  try {

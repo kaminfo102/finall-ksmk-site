@@ -1,14 +1,12 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 import AdminGalleryClient from "./client"
 
-const prisma = new PrismaClient()
-
 export default async function AdminGalleryPage() {
-  const items = await prisma.gallery.findMany({
+  const gallery = await prisma.gallery.findMany({
     orderBy: {
-      createdAt: 'desc'
-    }
+      createdAt: "desc",
+    },
   })
 
-  return <AdminGalleryClient items={items} />
+  return <AdminGalleryClient gallery={gallery} />
 }

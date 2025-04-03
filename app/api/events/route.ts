@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma'
 
 export async function GET() {
   try {
@@ -16,7 +14,7 @@ export async function GET() {
     return NextResponse.json(events)
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to fetch events' },
+      { error: 'خطا در دریافت رویدادها' },
       { status: 500 }
     )
   }

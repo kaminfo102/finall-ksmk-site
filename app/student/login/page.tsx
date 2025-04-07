@@ -17,45 +17,55 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { toast } from "sonner"
+import { useToast } from "@/components/ui/use-toast"
 
 const loginSchema = z.object({
-  email: z.string().email("ایمیل معتبر نیست"),
+  email: z.string().email("ایمیل نامعتبر است"),
   password: z.string().min(6, "رمز عبور باید حداقل ۶ کاراکتر باشد"),
 })
 
-export default function StudentLoginPage() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+type LoginForm = z.infer<typeof loginSchema>
 
-  const form = useForm<z.infer<typeof loginSchema>>({
+export default function StudentLoginPage() {
+  const { toast } = useToast()
+  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
   })
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+  const onSubmit = async (data: LoginForm) => {
     try {
-      setIsLoading(true)
       const response = await fetch("/api/student/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(data),
       })
 
+      const result = await response.json()
+
       if (!response.ok) {
-        throw new Error("خطا در ورود")
+        throw new Error(result.error || "خطا در ورود")
       }
 
-      toast.success("ورود موفقیت‌آمیز")
+      toast({
+        title: "ورود موفقیت‌آمیز",
+        description: "در حال انتقال به داشبورد...",
+      })
+
+      // Redirect to dashboard after successful login
       router.push("/student/dashboard")
     } catch (error) {
-      toast.error("خطا در ورود")
-    } finally {
-      setIsLoading(false)
+      toast({
+        variant: "destructive",
+        title: "خطا",
+        description: error instanceof Error ? error.message : "خطا در ورود",
+      })
     }
   }
 
@@ -69,47 +79,49 @@ export default function StudentLoginPage() {
           </p>
         </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ایمیل</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="email" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <Form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={register("email")}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ایمیل</FormLabel>
+                <FormControl>
+                  <Input {...field} type="email" />
+                </FormControl>
+                {errors.email && (
+                  <FormMessage>{errors.email.message}</FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>رمز عبور</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="password" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={register("password")}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>رمز عبور</FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                {errors.password && (
+                  <FormMessage>{errors.password.message}</FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "در حال ورود..." : "ورود"}
-            </Button>
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? "در حال ورود..." : "ورود"}
+          </Button>
 
-            <div className="text-center text-sm">
-              <span className="text-muted-foreground">حساب کاربری ندارید؟ </span>
-              <Link href="/student/register" className="text-primary hover:underline">
-                ثبت‌نام کنید
-              </Link>
-            </div>
-          </form>
+          <div className="text-center text-sm">
+            <span className="text-muted-foreground">حساب کاربری ندارید؟ </span>
+            <Link href="/student/register" className="text-primary hover:underline">
+              ثبت‌نام کنید
+            </Link>
+          </div>
         </Form>
       </div>
     </div>

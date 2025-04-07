@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 
 export async function POST() {
   try {
-    // Delete the token cookie
+    // Delete the student token cookie
     cookies().delete("student-token")
 
     return NextResponse.json(

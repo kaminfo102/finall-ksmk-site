@@ -13,6 +13,7 @@ import { RoadmapSection } from "@/components/roadmap-section"
 import { CompetitionRules } from "@/components/competition-rules"
 import { FAQSection } from "@/components/faq-section"
 import { CalendarDays } from 'lucide-react'
+import { WhatsAppFloat } from "@/components/whatsapp-float"
 
 
 const prisma = new PrismaClient()
@@ -37,6 +38,7 @@ export default async function Home() {
 
   return (
     <div className="pt-16">
+      <WhatsAppFloat />
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 h-[500px] md:h-[600px] lg:h-[700px] rounded-2xl overflow-hidden shadow-lg border border-border/50">

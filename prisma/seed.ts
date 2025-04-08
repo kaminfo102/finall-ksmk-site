@@ -16,7 +16,8 @@ async function main() {
       {
         title: "به آموزشگاه ما خوش آمدید",
         description: "آموزش حرفه‌ای برنامه‌نویسی و طراحی وب با بهترین اساتید",
-        imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070",
+        // imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070",
+        imageUrl: "https://uploadkon.ir/uploads/a42808_250-DMaharat.jpg",
         link: "/courses"
       },
       {

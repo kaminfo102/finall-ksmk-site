@@ -14,6 +14,7 @@ import { CompetitionRules } from "@/components/competition-rules"
 import { FAQSection } from "@/components/faq-section"
 import { CalendarDays } from 'lucide-react'
 
+
 const prisma = new PrismaClient()
 
 export default async function Home() {
@@ -53,16 +54,23 @@ export default async function Home() {
         </div>
       </div>
       {/* <StatsSection /> */}
-      <RoadmapSection />
-      <CompetitionRules />
-      <FAQSection />
+      {/* دوره های آموزشی */}
       <CoursesSection courses={courses} />
+      {/* چرا آموزشگاه ما */}
       <FeaturesSection />
-      <AboutSection />
+      {/* نقشه راه */}
+      {/* <RoadmapSection /> */}
+      {/* شرایط مسابقه */}
+      {/* <CompetitionRules /> */}
+      
+      {/*  چرا آموزشگاه ما با تصویر*/}
+      {/* <AboutSection /> */}
       <GallerySection items={galleryItems} />
       <EventsSection events={events} />
+      <FAQSection />
       <ContactSection />
       <PromotionDialog />
+      {/* <RepresentativesSection /> */}
     </div>
   )
 }

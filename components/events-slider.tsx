@@ -31,6 +31,8 @@ export function EventsSlider({ events }: { events: Event[] }) {
   const nextEvent = () => setCurrentEvent((prev) => (prev + 1) % events.length)
   const prevEvent = () => setCurrentEvent((prev) => (prev - 1 + events.length) % events.length)
 
+  const currentEventData = events[currentEvent]
+
   return (
     <div className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
       <AnimatePresence mode="wait">
@@ -44,8 +46,8 @@ export function EventsSlider({ events }: { events: Event[] }) {
         >
           <div className="relative w-full h-full">
             <Image
-              src={events[currentEvent].imageUrl}
-              alt={events[currentEvent].title}
+              src={currentEventData.imageUrl}
+              alt={currentEventData.title}
               fill
               sizes="100vw"
               className="object-cover object-center"
@@ -62,7 +64,7 @@ export function EventsSlider({ events }: { events: Event[] }) {
                 transition={{ delay: 0.2 }}
                 className="text-4xl md:text-6xl font-bold mb-4"
               >
-                {events[currentEvent].title}
+                {currentEventData.title}
               </motion.h1>
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
@@ -70,7 +72,7 @@ export function EventsSlider({ events }: { events: Event[] }) {
                 transition={{ delay: 0.3 }}
                 className="text-lg md:text-xl mb-4 max-w-2xl mx-auto"
               >
-                {events[currentEvent].description}
+                {currentEventData.description}
               </motion.p>
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -80,16 +82,16 @@ export function EventsSlider({ events }: { events: Event[] }) {
               >
                 <div className="flex items-center gap-2">
                   <span className="text-primary">📍</span>
-                  <span>{events[currentEvent].location}</span>
+                  <span>{currentEventData.location}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-primary">👥</span>
-                  <span>ظرفیت: {events[currentEvent].capacity} نفر</span>
+                  <span>ظرفیت: {currentEventData.capacity} نفر</span>
                 </div>
-                {events[currentEvent].price && (
+                {currentEventData.price !== null && currentEventData.price !== undefined && (
                   <div className="flex items-center gap-2">
                     <span className="text-primary">💰</span>
-                    <span>{events[currentEvent].price.toLocaleString()} تومان</span>
+                    <span>{currentEventData.price.toLocaleString()} تومان</span>
                   </div>
                 )}
               </motion.div>
@@ -98,7 +100,7 @@ export function EventsSlider({ events }: { events: Event[] }) {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <Link href={`/events/${events[currentEvent].id}`}>
+                <Link href={`/events/${currentEventData.id}`}>
                   <Button size="lg" variant="default">
                     ثبت نام در رویداد
                   </Button>

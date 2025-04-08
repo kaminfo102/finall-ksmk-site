@@ -8,5 +8,5 @@ export default async function AdminGalleryPage() {
     },
   })
 
-  return <AdminGalleryClient gallery={gallery} />
+  return <AdminGalleryClient items={gallery} />
 }

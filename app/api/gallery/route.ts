@@ -20,3 +20,22 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const body = await request.json()
+    const { title, imageUrl, description } = body
+
+    const galleryItem = await prisma.gallery.create({
+      data: {
+        title,
+        imageUrl,
+        description,
+      },
+    })
+
+    return NextResponse.json(galleryItem)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'خطا در ذخیره تصویر' },
+      { status: 500 }
+    )
+  }
+}

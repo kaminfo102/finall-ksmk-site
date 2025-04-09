@@ -396,9 +396,10 @@ export default function AdminEventsClient({ events }: { events: Event[] }) {
                     <FormItem>
                       <FormLabel>قیمت (تومان)</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="number" 
+                        <Input
+                          type="number"
                           {...field}
+                          value={field.value ?? ''}
                           onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : null)}
                         />
                       </FormControl>

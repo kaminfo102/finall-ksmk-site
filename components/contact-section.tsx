@@ -80,42 +80,47 @@ export function ContactSection() {
 
       setIsSuccess(true)
       form.reset()
-      // toast.success('پیام شما با موفقیت ارسال شد', {
-      //   duration: 5000,
-      //   position: 'top-center',
-      //   className: 'bg-green-50 dark:bg-green-900 text-lg p-4',
-      //   style: {
-      //     background: 'var(--background)',
-      //     border: '1px solid var(--border)',
-      //   },
       toast('پیام شما با موفقیت ارسال شد!', {
-        // icon: <Image
-        //               src="/images/logo/head-.png"
-        //               alt="Logo"
-        //               width={100}
-        //               height={100}
-        //               className="rounded-lg"
-        //             />,
-      
+        duration: 4000,
+        position: 'top-center',
+        className: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+        style: {
+          background: 'var(--background)',
+          border: '1px solid var(--border)',
+          fontFamily: 'var(--font-vazirmatn)',
+          fontSize: '1rem',
+          padding: '1rem',
+          borderRadius: '0.75rem',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+          maxWidth: '90%',
+          margin: '0 auto',
+        },
         description: (
-          <div className="mt-2 flex items-center text-green-600 dark:text-green-400">
-            <CheckCircle2 className="h-5 w-5 ml-2" />
+          <div className="mt-2 flex items-center text-green-600 dark:text-green-400 text-sm">
+            <CheckCircle2 className="h-4 w-4 ml-2" />
             <span>در اسرع وقت با شما تماس خواهیم گرفت</span>
           </div>
         ),
       })
     } catch (error) {
       toast.error('خطا در ارسال پیام', {
-        duration: 5000,
+        duration: 4000,
         position: 'top-center',
-        className: 'bg-red-50 dark:bg-red-900 text-lg p-4',
+        className: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
         style: {
           background: 'var(--background)',
           border: '1px solid var(--border)',
+          fontFamily: 'var(--font-vazirmatn)',
+          fontSize: '1rem',
+          padding: '1rem',
+          borderRadius: '0.75rem',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+          maxWidth: '90%',
+          margin: '0 auto',
         },
         description: (
-          <div className="mt-2 text-red-600 dark:text-red-400">
-            لطفاً دوباره تلاش کنید
+          <div className="mt-2 flex items-center text-red-600 dark:text-red-400 text-sm">
+            <span>لطفاً دوباره تلاش کنید</span>
           </div>
         ),
       })

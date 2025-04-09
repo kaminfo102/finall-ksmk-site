@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model HeroSlider {
@@ -21,7 +21,7 @@ model Course {
   id          Int       @id @default(autoincrement())
   title       String
   summary     String
-  content     String    @db.Text
+  content     String
   imageUrl    String
   views       Int       @default(0)
   likes       Int       @default(0)
@@ -52,6 +52,7 @@ model Event {
   id            Int           @id @default(autoincrement())
   title         String
   description   String
+  content       String?
   imageUrl      String
   date          DateTime
   location      String
@@ -61,6 +62,15 @@ model Event {
   updatedAt     DateTime      @updatedAt
   registrations Registration[]
   studentRegistrations StudentEventRegistration[]
+  images        EventImage[]
+}
+
+model EventImage {
+  id        Int      @id @default(autoincrement())
+  url       String
+  eventId   Int
+  event     Event    @relation(fields: [eventId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model Registration {

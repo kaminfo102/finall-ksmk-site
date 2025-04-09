@@ -47,43 +47,40 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
               alt={slides[currentSlide].title}
               fill
               sizes="100vw"
-              className="object-cover object-center"
+              className="object-cover"
               priority
               quality={100}
             />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40" />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="container mx-auto px-4 text-center text-white">
-              <motion.h1
+          
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/80 to-transparent p-6">
+            <div className="container mx-auto px-4">
+              <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="text-4xl md:text-6xl font-bold mb-4"
+                exit={{ y: 20, opacity: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="space-y-4"
               >
-                {slides[currentSlide].title}
-              </motion.h1>
-              <motion.p
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-lg md:text-xl mb-8 max-w-2xl mx-auto"
-              >
-                {slides[currentSlide].description}
-              </motion.p>
-              {slides[currentSlide].link && (
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  <Link href={slides[currentSlide].link!}>
-                    <Button size="lg" variant="default">
-                      بیشتر بدانید
-                    </Button>
-                  </Link>
-                </motion.div>
-              )}
+                <h1 className="text-3xl md:text-5xl font-bold text-white">
+                  {slides[currentSlide].title}
+                </h1>
+                <div className="max-h-24 overflow-y-auto">
+                  <p className="text-lg md:text-xl text-white/90">
+                    {slides[currentSlide].description}
+                  </p>
+                </div>
+                {slides[currentSlide].link && (
+                  <div className="pt-4">
+                    <Link href={slides[currentSlide].link!}>
+                      <Button size="lg" variant="default" className="w-full md:w-auto">
+                        بیشتر بدانید
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </motion.div>
             </div>
           </div>
         </motion.div>

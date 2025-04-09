@@ -45,12 +45,12 @@ export default async function Home() {
             <HeroSlider slides={slides} />
           </div>
           <div className="lg:col-span-1 flex flex-col h-[500px] md:h-[600px] lg:h-[700px] rounded-2xl shadow-lg border border-border/50 overflow-hidden">
-            <div className="flex items-center justify-center p-4 bg-gradient-to-b from-muted/50 to-muted/70 border-b border-border/50">
+            {/* <div className="flex items-center justify-center p-4 bg-gradient-to-b from-muted/50 to-muted/70 border-b border-border/50">
               <h3 className="text-lg font-semibold text-primary">رویدادهای مهم</h3>
               <CalendarDays className="h-5 w-5 mr-2 text-primary/80" />
-            </div>
+            </div> */}
             <div className="flex-grow overflow-hidden">
-              <EventsSlider events={events} />
+              <EventsSlider />
             </div>
           </div>
         </div>

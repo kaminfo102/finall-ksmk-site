@@ -5,7 +5,8 @@ export async function GET() {
   try {
     const events = await prisma.event.findMany({
       include: {
-        registrations: true
+        registrations: true,
+        images: true
       },
       orderBy: {
         date: 'desc'
@@ -27,17 +28,26 @@ export async function POST(request: Request) {
       data: {
         title: body.title,
         description: body.description,
+        content: body.content,
         imageUrl: body.imageUrl,
         date: new Date(body.date),
         location: body.location,
         capacity: body.capacity,
-        price: body.price
+        price: body.price,
+        images: {
+          create: body.images.map((image: { url: string }) => ({
+            url: image.url
+          }))
+        }
+      },
+      include: {
+        images: true
       }
     })
     return NextResponse.json(event)
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to create event' },
+      { error: 'خطا در ایجاد رویداد' },
       { status: 500 }
     )
   }
@@ -46,6 +56,15 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const body = await request.json()
+    
+    // First, delete all existing images
+    await prisma.eventImage.deleteMany({
+      where: {
+        eventId: body.id
+      }
+    })
+
+    // Then update the event with new data
     const event = await prisma.event.update({
       where: {
         id: body.id
@@ -53,17 +72,26 @@ export async function PUT(request: Request) {
       data: {
         title: body.title,
         description: body.description,
+        content: body.content,
         imageUrl: body.imageUrl,
         date: new Date(body.date),
         location: body.location,
         capacity: body.capacity,
-        price: body.price
+        price: body.price,
+        images: {
+          create: body.images.map((image: { url: string }) => ({
+            url: image.url
+          }))
+        }
+      },
+      include: {
+        images: true
       }
     })
     return NextResponse.json(event)
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to update event' },
+      { error: 'خطا در به‌روزرسانی رویداد' },
       { status: 500 }
     )
   }

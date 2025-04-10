@@ -6,13 +6,13 @@ import { Code2, Users, Trophy, BookOpen, Rocket, Heart } from "lucide-react"
 const features = [
   {
     icon: Code2,
-    title: "آموزش عملی",
-    description: "یادگیری از طریق پروژه‌های واقعی و کاربردی با جدیدترین تکنولوژی‌ها"
+    title: "آموزش تخصصی در حوزه کودکان و نوجوانان",
+    description: "یادگیری با جدیدترین تکنولوژی‌ها و روش‌های آموزشی روز"
   },
   {
     icon: Users,
-    title: "اساتید مجرب",
-    description: "بهره‌مندی از تجربیات اساتید حرفه‌ای و متخصص در صنعت"
+    title: " مربیان مجرب و متخصص در حوزه کودکان و نوجوانان",
+    description: "بهره‌مندی از تجربیات اساتید حرفه‌ای و متخصص"
   },
   {
     icon: Trophy,
@@ -21,18 +21,18 @@ const features = [
   },
   {
     icon: BookOpen,
-    title: "منابع آموزشی",
-    description: "دسترسی به جدیدترین منابع و مطالب آموزشی به روز شده"
+    title: " منابع آموزشی با کیفیت بالا",
+    description: "منابع آموزشی با کیفیت بالا و به روز شده همگام با جدید ترین روش های آموزشی روز دنیا"
   },
   {
     icon: Rocket,
     title: "پشتیبانی ویژه",
-    description: "ارائه خدمات مشاوره و پشتیبانی ۲۴/۷ به دانشجویان"
+    description: "ارائه خدمات مشاوره و پشتیبانی ۲۴/۷ به فراگیران"
   },
   {
     icon: Heart,
-    title: "تضمین کیفیت",
-    description: "تضمین کیفیت آموزش و بازگشت شهریه در صورت عدم رضایت"
+    title: "برگزاری مسابقات ملی و بین المللی",
+    description: "برگزاری مسابقات متعدد استانی، ملی و بین المللی برای فراگیران"
   }
 ]
 
@@ -50,7 +50,7 @@ export function FeaturesSection() {
             viewport={{ once: true }}
             className="text-3xl font-bold mb-4"
           >
-            چرا آموزشگاه ما؟
+            چرا موسسه بین المللی کودکان هوشمند؟
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ export function FeaturesSection() {
             viewport={{ once: true }}
             className="text-muted-foreground"
           >
-            ویژگی‌های منحصر به فرد ما در ارائه خدمات آموزشی
+            ویژگی‌های منحصر به فرد ما در ارائه خدمات آموزشی در حوزه کودکان و نوجوانان
           </motion.p>
         </div>
 

@@ -28,9 +28,12 @@ import { Loader2 } from "lucide-react"
 
 // Registration form schema with improved validation
 const registrationSchema = z.object({
-  name: z.string()
+  firstName: z.string()
     .min(2, "نام باید حداقل ۲ حرف باشد")
     .max(50, "نام نمی‌تواند بیشتر از ۵۰ حرف باشد"),
+  lastName: z.string()
+    .min(2, "نام خانوادگی باید حداقل ۲ حرف باشد")
+    .max(50, "نام خانوادگی نمی‌تواند بیشتر از ۵۰ حرف باشد"),
   phone: z.string()
     .min(11, "شماره تلفن باید ۱۱ رقم باشد")
     .max(11, "شماره تلفن باید ۱۱ رقم باشد")
@@ -86,7 +89,8 @@ export default function EventRegistrationForm({
   const form = useForm<FormValues>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       phone: "",
       email: "",
       age: 18,
@@ -102,15 +106,21 @@ export default function EventRegistrationForm({
     try {
       setIsSubmitting(true)
       
+      // Only send fields that exist in the Prisma schema
+      const registrationData = {
+        eventId,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phone: values.phone,
+        ...(values.email ? { email: values.email } : {})
+      };
+      
       const response = await fetch('/api/events/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          ...values,
-          eventId
-        })
+        body: JSON.stringify(registrationData)
       })
 
       const data = await response.json()
@@ -149,12 +159,26 @@ export default function EventRegistrationForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>نام و نام خانوادگی</FormLabel>
+                    <FormLabel>نام</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="نام خود را وارد کنید" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>نام خانوادگی</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="نام خانوادگی خود را وارد کنید" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -6,9 +6,12 @@ import { Prisma } from '@prisma/client'
 // Validation schema for registration data
 const registrationSchema = z.object({
   eventId: z.number().int().positive("شناسه رویداد نامعتبر است"),
-  name: z.string()
+  firstName: z.string()
     .min(2, "نام باید حداقل ۲ حرف باشد")
     .max(50, "نام نمی‌تواند بیشتر از ۵۰ حرف باشد"),
+  lastName: z.string()
+    .min(2, "نام خانوادگی باید حداقل ۲ حرف باشد")
+    .max(50, "نام خانوادگی نمی‌تواند بیشتر از ۵۰ حرف باشد"),
   phone: z.string()
     .min(11, "شماره تلفن باید ۱۱ رقم باشد")
     .max(11, "شماره تلفن باید ۱۱ رقم باشد")
@@ -77,7 +80,7 @@ export async function POST(req: Request) {
       }
 
       // Check if user is already registered
-      const existingRegistration = await tx.eventRegistration.findFirst({
+      const existingRegistration = await tx.registration.findFirst({
         where: {
           eventId: data.eventId,
           OR: [
@@ -92,19 +95,19 @@ export async function POST(req: Request) {
       }
 
       // Create registration
-      const registration = await tx.eventRegistration.create({
-        data: {
-          eventId: data.eventId,
-          name: data.name,
-          phone: data.phone,
-          email: data.email || null,
-          age: data.age,
-          gender: data.gender,
-          address: data.address,
-          emergencyContact: data.emergencyContact,
-          medicalConditions: data.medicalConditions || null,
-          notes: data.notes || null
-        }
+      const registrationData: any = {
+        eventId: data.eventId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone
+      };
+      
+      if (data.email) {
+        registrationData.email = data.email;
+      }
+      
+      const registration = await tx.registration.create({
+        data: registrationData
       })
 
       return registration

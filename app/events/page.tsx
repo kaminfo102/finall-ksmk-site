@@ -1,7 +1,6 @@
 import { Metadata } from "next"
 import { PrismaClient, Prisma } from "@prisma/client"
 import { EventsHero } from "@/components/events-hero"
-import { EventsList } from "@/components/events-list"
 import { prisma } from "@/lib/prisma"
 import { format } from "date-fns-jalali"
 import Image from "next/image"
@@ -12,8 +11,6 @@ import { Input } from "@/components/ui/input"
 import { Calendar, MapPin, Search, Users } from "lucide-react"
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
-
-const prismaClient = new PrismaClient()
 
 export const metadata: Metadata = {
   title: "رویدادها | آموزشگاه ما",
@@ -51,7 +48,7 @@ function EventsListSkeleton() {
 }
 
 // Events list component
-async function EventsList({
+async function EventsListContent({
   searchParams
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -62,41 +59,39 @@ async function EventsList({
   const location = typeof searchParams.location === 'string' ? searchParams.location : ''
   
   // Get total count for pagination
-  const totalCount = await prismaClient.event.count({
+  const totalCount = await prisma.event.count({
     where: {
       OR: [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { content: { contains: search, mode: 'insensitive' } }
+        { title: { contains: search } },
+        { description: { contains: search } },
+        { content: { contains: search } }
       ],
-      ...(location ? { location: { contains: location, mode: 'insensitive' } } : {})
+      ...(location ? { location: { contains: location } } : {})
     }
   })
   
   // Get events with pagination and search
-  const events = await prismaClient.event.findMany({
+  const events = await prisma.event.findMany({
     where: {
       OR: [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { content: { contains: search, mode: 'insensitive' } }
+        { title: { contains: search } },
+        { description: { contains: search } },
+        { content: { contains: search } }
       ],
-      ...(location ? { location: { contains: location, mode: 'insensitive' } } : {})
+      ...(location ? { location: { contains: location } } : {})
     },
     orderBy: {
       date: 'desc'
     },
     include: {
-      _count: {
-        select: { registrations: true }
-      }
+      registrations: true
     },
     skip: (page - 1) * limit,
     take: limit
   })
   
   // Get unique locations for filter
-  const locations = await prismaClient.event.findMany({
+  const locations = await prisma.event.findMany({
     select: {
       location: true
     },
@@ -146,8 +141,8 @@ async function EventsList({
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event) => {
-              const isFull = event._count.registrations >= event.capacity
-              const remainingSpots = event.capacity - event._count.registrations
+              const isFull = event.registrations.length >= event.capacity
+              const remainingSpots = event.capacity - event.registrations.length
               
               return (
                 <Card key={event.id} className="overflow-hidden flex flex-col">
@@ -238,8 +233,11 @@ export default function EventsPage({
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   return (
-    <Suspense fallback={<EventsListSkeleton />}>
-      <EventsList searchParams={searchParams} />
-    </Suspense>
+    <>
+      <EventsHero />
+      <Suspense fallback={<EventsListSkeleton />}>
+        <EventsListContent searchParams={searchParams} />
+      </Suspense>
+    </>
   )
 }

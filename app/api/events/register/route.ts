@@ -1,26 +1,139 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
+import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 
-const prisma = new PrismaClient()
+// Validation schema for registration data
+const registrationSchema = z.object({
+  eventId: z.number().int().positive("شناسه رویداد نامعتبر است"),
+  name: z.string()
+    .min(2, "نام باید حداقل ۲ حرف باشد")
+    .max(50, "نام نمی‌تواند بیشتر از ۵۰ حرف باشد"),
+  phone: z.string()
+    .min(11, "شماره تلفن باید ۱۱ رقم باشد")
+    .max(11, "شماره تلفن باید ۱۱ رقم باشد")
+    .regex(/^09[0-9]{9}$/, "شماره تلفن باید با ۰۹ شروع شود"),
+  email: z.string()
+    .email("ایمیل معتبر نیست")
+    .optional()
+    .or(z.literal("")),
+  age: z.number()
+    .int()
+    .min(1, "سن باید حداقل ۱ سال باشد")
+    .max(100, "سن نمی‌تواند بیشتر از ۱۰۰ سال باشد"),
+  gender: z.enum(["male", "female"], {
+    required_error: "لطفاً جنسیت را انتخاب کنید"
+  }),
+  address: z.string()
+    .min(10, "آدرس باید حداقل ۱۰ حرف باشد")
+    .max(200, "آدرس نمی‌تواند بیشتر از ۲۰۰ حرف باشد"),
+  emergencyContact: z.string()
+    .min(11, "شماره تماس اضطراری باید ۱۱ رقم باشد")
+    .max(11, "شماره تماس اضطراری باید ۱۱ رقم باشد")
+    .regex(/^09[0-9]{9}$/, "شماره تماس اضطراری باید با ۰۹ شروع شود"),
+  medicalConditions: z.string()
+    .max(500, "توضیحات پزشکی نمی‌تواند بیشتر از ۵۰۰ حرف باشد")
+    .optional()
+    .or(z.literal("")),
+  notes: z.string()
+    .max(500, "یادداشت‌ها نمی‌تواند بیشتر از ۵۰۰ حرف باشد")
+    .optional()
+    .or(z.literal(""))
+})
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json()
-    const event = await prisma.event.create({
-      data: {
-        title: body.title,
-        description: body.description,
-        imageUrl: body.imageUrl,
-        date: new Date(body.date),
-        location: body.location,
-        capacity: body.capacity,
-        price: body.price
+    const body = await req.json()
+    
+    // Validate input data
+    const validationResult = registrationSchema.safeParse(body)
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: 'اطلاعات نامعتبر است', details: validationResult.error.errors },
+        { status: 400 }
+      )
+    }
+
+    const data = validationResult.data
+
+    // Use transaction to ensure data consistency
+    const result = await prisma.$transaction(async (tx) => {
+      // Check if event exists and has capacity
+      const event = await tx.event.findUnique({
+        where: { id: data.eventId },
+        include: {
+          _count: {
+            select: { registrations: true }
+          }
+        }
+      })
+
+      if (!event) {
+        throw new Error('رویداد مورد نظر یافت نشد')
       }
+
+      if (event._count.registrations >= event.capacity) {
+        throw new Error('ظرفیت رویداد تکمیل شده است')
+      }
+
+      // Check if user is already registered
+      const existingRegistration = await tx.eventRegistration.findFirst({
+        where: {
+          eventId: data.eventId,
+          OR: [
+            { phone: data.phone },
+            ...(data.email ? [{ email: data.email }] : [])
+          ]
+        }
+      })
+
+      if (existingRegistration) {
+        throw new Error('شما قبلاً در این رویداد ثبت نام کرده‌اید')
+      }
+
+      // Create registration
+      const registration = await tx.eventRegistration.create({
+        data: {
+          eventId: data.eventId,
+          name: data.name,
+          phone: data.phone,
+          email: data.email || null,
+          age: data.age,
+          gender: data.gender,
+          address: data.address,
+          emergencyContact: data.emergencyContact,
+          medicalConditions: data.medicalConditions || null,
+          notes: data.notes || null
+        }
+      })
+
+      return registration
     })
-    return NextResponse.json(event)
+
+    return NextResponse.json(result)
   } catch (error) {
+    console.error('Error in event registration:', error)
+    
+    // Handle specific Prisma errors
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        return NextResponse.json(
+          { error: 'شما قبلاً در این رویداد ثبت نام کرده‌اید' },
+          { status: 400 }
+        )
+      }
+    }
+    
+    // Handle custom errors from transaction
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      )
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to create event' },
+      { error: 'خطا در ثبت نام. لطفاً دوباره تلاش کنید' },
       { status: 500 }
     )
   }
